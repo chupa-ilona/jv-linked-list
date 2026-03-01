@@ -98,7 +98,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             current = current.next;
         }
         T result = (T) current.value;
-        current.value= value;
+        current.value = value;
         return result;
     }
 
@@ -145,7 +145,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         if (nextNode == null) {
             tail = prevNode;
         } else {
-            nextNode.prev= prevNode;
+            nextNode.prev = prevNode;
         }
     }
 
