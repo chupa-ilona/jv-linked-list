@@ -2,10 +2,22 @@ package core.basesyntax;
 
 import java.util.List;
 
-public class MyLinkedList <T> implements MyLinkedListInterface<T> {
-    private Node <T> head;
-    private Node <T> tail;
+public class MyLinkedList<T> implements MyLinkedListInterface<T> {
+    private Node<T> head;
+    private Node<T> tail;
     private int size;
+
+    class Node<T> {
+        T value;
+        Node<T> next;
+        Node<T> prev;
+
+        public Node(T value) {
+            this.value = value;
+            this.next = null;
+            this.prev = null;
+        }
+    }
 
     @Override
     public void add(T value) {
@@ -14,8 +26,8 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
             head = newNode;
             tail = newNode;
         } else {
-            tail.setNext(newNode);
-            newNode.setPrev(tail);
+            tail.next = newNode;
+            newNode.prev = tail;
             tail = newNode;
         }
         size++;
@@ -29,9 +41,9 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
 
         Node<T> newNode = new Node<>(value);
         if (index == 0) {
-            newNode.setNext(head);
+            newNode.next = head;
             if (head != null) {
-                head.setPrev(newNode);
+                head.prev = newNode;
             }
             head = newNode;
             if (tail == null) {
@@ -43,16 +55,16 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
         } else {
             Node<T> current = head;
             for (int i = 0; i < index; i++) {
-                current = current.getNext();
+                current = current.next;
             }
 
-            Node<T> prevNode = current.getPrev();
+            Node<T> prevNode = current.prev;
 
-            prevNode.setNext(newNode);
-            newNode.setPrev(prevNode);
+            prevNode.next = newNode;
+            newNode.prev = prevNode;
 
-            newNode.setNext(current);
-            current.setPrev(newNode);
+            newNode.next = current;
+            current.prev = newNode;
         }
         size++;
     }
@@ -71,9 +83,9 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
         }
         Node<T> current = head;
         for (int i = 0; i < index; i++) {
-            current = current.getNext();
+            current = current.next;
         }
-        return (T) current.getValue();
+        return (T) current.value;
     }
 
     @Override
@@ -83,10 +95,10 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
         }
         Node<T> current = head;
         for (int i = 0; i < index; i++) {
-            current = current.getNext();
+            current = current.next;
         }
-        T result = (T) current.getValue();
-        current.setValue(value);
+        T result = (T) current.value;
+        current.value= value;
         return result;
     }
 
@@ -97,9 +109,9 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
         }
         Node<T> current = head;
         for (int i = 0; i < index; i++) {
-            current = current.getNext();
+            current = current.next;
         }
-        T value = (T) current.getValue();
+        T value = (T) current.value;
         unlinkNode(current);
         size--;
         return value;
@@ -110,30 +122,30 @@ public class MyLinkedList <T> implements MyLinkedListInterface<T> {
         Node<T> current = head;
 
         while (current != null) {
-            if (java.util.Objects.equals(current.getValue(), target)) {
+            if (java.util.Objects.equals(current.value, target)) {
                 unlinkNode(current);
                 size--;
                 return true;
             }
-            current = current.getNext();
+            current = current.next;
         }
         return false;
     }
 
     private void unlinkNode(Node<T> node) {
-        Node<T> prevNode = node.getPrev();
-        Node<T> nextNode = node.getNext();
+        Node<T> prevNode = node.prev;
+        Node<T> nextNode = node.next;
 
         if (prevNode == null) {
             head = nextNode;
         } else {
-            prevNode.setNext(nextNode);
+            prevNode.next = nextNode;
         }
 
         if (nextNode == null) {
             tail = prevNode;
         } else {
-            nextNode.setPrev(prevNode);
+            nextNode.prev= prevNode;
         }
     }
 
